@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f0e2;
+            margin: 0;
+            padding: 0;
+            
+        }
+        
+        .navbar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            background-color: rgb(234, 192, 78);
+            padding: 13px;
+            color: rgb(225, 175, 69);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: x-large;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ffd700; /* Change color on hover */
+        }
+
+        .main-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom, rgba(234, 192, 78, 0.9), rgba(234, 192, 78, 0.7)), url('background.jpg');
+            background-size: cover;
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .main-header h1 {
+            font-size: 3rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-header img {
+            margin-right: 10px;
+            width: 50px;
+            height: 50px;
+        }
+
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 5px;
+            color: rgb(100, 100, 100);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            max-width: 300px; 
+            border-radius: 5px;
+            margin-bottom: 10px; 
+            background-color: #f4e0c5;
+            color: white;
+            border: none;
+         
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        button[type="submit"] {
+            background-color: rgb(243, 204, 97);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+    
+
+        button[type="submit"]:hover {
+            background-color: #ffd700; 
+        }
+
+        #weatherContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        #weatherIcon {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s, opacity 0.3s;      }
+      #weatherIcon:hover {
+            transform: scale(1.1);
+        }
+
+        #weatherInfo {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #locationFormContainer {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        #weatherIconPlaceholder {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(255, 255, 255, 0.9); 
+          border-radius: 50%;
+          width: 150px;
+          height: 150px;
+          margin: 0 auto 20px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
+          margin-top: 15px;
+      }
+        
+        #weatherIconPlaceholder img {
+            width: 50px;
+            height: 50px;
+        }
+        .weather-day {
+            text-align: center;
+            margin-bottom: 20px;
+            flex-basis: calc(33.33% - 20px);
+        }
+        .weather-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+        }
+        @media screen and (max-width: 768px) {
+            .weather-day {
+                flex-basis: calc(50% - 20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-header">
+        <img src="https://icons.iconarchive.com/icons/dtafalonso/win-10x/128/Weather-icon.png" alt="weather icon">
+        <h1>Weather App</h1>
+        <div class="navbar">
+            <a href="#"><i class="fas fa-home"></i></a>
+            <a href="#"><i class="fas fa-cog"></i></a>
+            <!-- Add more navigation items as needed -->
+        </div>
+    </div>
+  
+    <div id="locationFormContainer">
+        <form id="locationForm">
+            <label for="location">Enter Location</label>
+            <br>
+            <input type="text" id="location" required>
+            <br>
+            <button type="submit">Get Weather</button>
+        </form>
+        
+        <div id="weatherIconPlaceholder">
+            <img id="weatherIcon" src="sunny.jpg" alt="Weather Icon">
+        </div>
+    </div>
+   
+    
+    <div id="weatherInfo"></div>
+    <script>
+        const apiKey = '7a56a3ce58mshe0a9ef9613c7f24p1f98fejsncdd919347700';
+
+        document.getElementById('locationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const location = document.getElementById('location').value;
+            getLocationData(location);
+        });
+      
+        function getLocationData(location) {
+            const locationUrl = `https://foreca-weather.p.rapidapi.com/location/search/${location}?lang=en`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'foreca-weather.p.rapidapi.com'
+                }
+            };
+
+            fetch(locationUrl, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const locationsArray = data.locations;
+                    if (locationsArray.length === 0) {
+                        alert('Location not found. Please enter a valid location.');
+                        return;
+                    }
+                    const locationId = locationsArray[0].id; // Access 'id' property correctly
+                    getWeatherForecast(locationId);
+                })
+                .catch(error => console.error('Error fetching location data:', error));
+        }
+
+        function getWeatherForecast(locationId) {
+            const weatherUrl = `https://foreca-weather.p.rapidapi.com/forecast/daily/${locationId}?alt=0&tempunit=C&windunit=MS&periods=8&dataset=full`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': apiKey,
+                    'X-RapidAPI-Host': 'foreca-weather.p.rapidapi.com'
+                }
+            };
+
+            fetch(weatherUrl, options)
+                .then(response => response.json())
+                .then(weatherData => {
+                    if (weatherData.forecast.length === 0) {
+                        alert('Weather data not available for this location.');
+                        return;
+                    }
+                    console.log("ss")
+                    console.log(weatherData);
+                    console.log("ss")
+                    displayWeatherInfo(weatherData);
+                    console.log(weatherData.current_weather)
+                   // updateWeatherIcon(weatherData.current_weather.symbol); // Pass the first forecast object
+                    updateWeatherIcon(weatherData.forecast[0]); // Pass the first forecast object
+                })
+                .catch(error => console.error('Error fetching weather data:', error));
+        }
+        function displayWeatherInfo(weatherData) {
+            const weatherContainer = document.getElementById('weatherInfo');
+            console.log(weatherData);
+            // Display forecast information
+            const forecastHtml = weatherData.forecast.map(forecast => `
+                <div>
+                    <h2>${forecast.date}</h2>
+                    <p>${forecast.symbolPhrase}</p>
+                    <p>Max Temp: ${forecast.maxTemp} &#8451;</p>
+                    <p>Min Temp: ${forecast.minTemp} &#8451;</p>
+                </div>
+            `).join('');
+        
+            // Combine forecast information
+            weatherContainer.innerHTML = forecastHtml;
+            //updateWeatherIcon(weatherData.forecast[0]); // Pass the first forecast object
+        }
+      function updateWeatherIcon(weatherData) {
+        const weatherIcon = document.getElementById('weatherIcon');
+        const iconCode = weatherData.symbol; 
+        const iconURL = getIconURL(iconCode);
+        
+        if (iconURL) {
+            weatherIcon.src = 'images/'+iconURL;
+        } else {
+            weatherIcon.src = 'images/01-s.png';
+        }
+    }
+
+    function getIconURL(weatherCode) {
+      console.log(weatherCode);
+      const iconMappings = {
+        d100: '01-s.png',
+        d101: '02-s.png',
+        d102: '03-s.png',
+        d103: '04-s.png',
+        d105: '05-s.png',
+        d106: '06-s.png',
+        d107: '07-s.png',
+        d108: '08-s.png',
+        d111: '11-s.png',
+        d112: '12-s.png',
+        d113: '13-s.png',
+        d114: '14-s.png',
+        d115: '15-s.png',
+        d116: '16-s.png',
+        d117: '17-s.png',
+        d118: '18-s.png',
+        d119: '19-s.png',
+        d120: '20-s.png',
+        d121: '21-s.png',
+        d122: '22-s.png',
+        d123: '23-s.png',
+        d124: '24-s.png',
+        d125: '25-s.png',
+        d126: '26-s.png',
+        d129: '29-s.png',
+        d130: '30-s.png',
+        d131: '31-s.png',
+        d132: '32-s.png',
+        d133: '33-s.png',
+        d134: '34-s.png',
+        d135: '35-s.png',
+        d136: '36-s.png',
+        d137: '37-s.png',
+        d138: '38-s.png',
+        d139: '39-s.png',
+        d140: '40-s.png',
+        d141: '41-s.png',
+        d142: '42-s.png',
+        d143: '43-s.png',
+        d144: '44-s.png'
+    };
+        
+        return iconMappings[weatherCode];
+    }
+
+   
+  </script>
+  
+</body>
+</html>
